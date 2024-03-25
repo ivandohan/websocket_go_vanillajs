@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Websocket</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="center">
+        <h1>Websocket Chat App</h1>
+        <h3 id="chat-header">
+            Currently, in chat: General
+        </h3>
+
+        <form action="" id="chatroom-selection">
+            <label for="chatroom">Chatroom</label>
+            <input type="text" name="chatroom" id="chatroom"> <br><br>
+            <input type="submit" value="Change chatroom">
+        </form>
+
+        <br>
+
+        <textarea name="chatmessages" id="chatmessages" cols="50" rows="4" class="messagearea" readonly
+        placeholder="Welcome to the general chatroom, here messages from others will appear"></textarea>
+
+        <br>
+
+        <form action="" id="chatroom-message">
+            <label for="message">Message</label>
+            <input type="text" name="message" id="message"><br><br>
+            <input type="submit" value="Send message">
+        </form>
+
+        <script src="index.js"></script>
+    </div>
+</body>
+</html>
