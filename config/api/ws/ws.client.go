@@ -1,10 +1,12 @@
-package api
+package ws
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/websocket"
 	"log"
 	"time"
+	wsentity "websocket-message-sample/entity/ws"
 )
 
 type ClientList map[*Client]bool
@@ -19,14 +21,16 @@ type Client struct {
 	manager    *Manager
 
 	// egress is used to avoid concurrent writes on the websocket
-	egress chan []byte
+	egress chan wsentity.Event
+
+	chatroom string
 }
 
 func NewClient(conn *websocket.Conn, manager *Manager) *Client {
 	return &Client{
 		connection: conn,
 		manager:    manager,
-		egress:     make(chan []byte),
+		egress:     make(chan wsentity.Event),
 	}
 }
 
@@ -57,7 +61,7 @@ func (c *Client) readMessages() {
 			break
 		}
 
-		var request Event
+		var request wsentity.Event
 		if err := json.Unmarshal(payload, &request); err != nil {
 			log.Println("[ERROR] [readMessages - Client] :", err)
 			break
@@ -67,7 +71,7 @@ func (c *Client) readMessages() {
 			log.Println("[ERROR] [readMessages - Client] Error handling message :", err)
 		}
 		//fmt.Println("[INFO] [readMessages - Client] Message Type:", messageType)
-		//fmt.Println("[INFO] [readMessages - Client] Payload:", string(payload))
+		fmt.Println("[INFO] [readMessages - Client] Payload:", string(payload))
 	}
 }
 

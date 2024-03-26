@@ -11,10 +11,13 @@
         <h3 id="chat-header">
             Currently, in chat: General
         </h3>
+        <h3 id="connection-header">
+            Connected to websocket: False
+        </h3>
 
         <form id="chatroom-selection">
             <label for="chatroom">Chatroom</label>
-            <input type="text" name="chatroom" id="chatroom"> <br><br>
+            <input type="text" name="chatroom" id="chatroom" autocomplete="off"> <br><br>
             <input type="submit" value="Change chatroom">
         </form>
 
@@ -27,9 +30,21 @@
 
         <form id="chatroom-message">
             <label for="message">Message</label>
-            <input type="text" name="message" id="message"><br><br>
+            <input type="text" name="message" id="message" autocomplete="off"><br><br>
             <input type="submit" value="Send message">
         </form>
+
+        <div class="login">
+            <form id="login-form">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" placeholder="Input your username..." autocomplete="off">
+
+                <label for="password">Password</label>
+                <input type="text" name="password" id="password" placeholder="Input your password..." autocomplete="off">
+
+                <input type="submit" value="login">
+            </form>
+        </div>
 
         <script src="index.js"></script>
     </div>

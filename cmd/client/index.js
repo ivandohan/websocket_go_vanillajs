@@ -1,5 +1,79 @@
+class SendMessageEvent {
+    constructor(message, from) {
+        this.message = message;
+        this.from = from;
+    }
+}
+
+class NewMessageEvent {
+    constructor(message, from, sent) {
+        this.message = message;
+        this.from = from;
+        this.sent = sent;
+    }
+}
+
+class ChangeRoomEvent {
+    constructor(name) {
+        this.name = name
+    }
+}
+
 let selectedChat = "general"
 let conn
+
+const login = () => {
+    let loginData = {
+        "username": document.getElementById("username").value,
+        "password": document.getElementById("password").value,
+    }
+
+    fetch("login", {
+        method: "post",
+        body: JSON.stringify(loginData),
+        mode: "cors",
+    }).then((response) => {
+        if(response.ok) {
+            return response.json()
+        } else {
+            throw "unauthorized"
+        }
+    }).then((data) => {
+        connectWebSocket(data.otp)
+    }).catch((err) => {
+        alert("[ERROR] [login JS]")
+    })
+
+    return false
+}
+
+const connectWebSocket = (otp) => {
+    if(window["WebSocket"]) {
+        console.log("Supports websocket!")
+
+        conn = new WebSocket("wss://" + document.location.host + "/ws?otp=" + otp)
+
+        conn.onopen = (event) => {
+            document.getElementById("connection-header").innerHTML = "Connected to websocket: True"
+        }
+
+        conn.onclose = (event) => {
+            document.getElementById("connection-header").innerHTML = "Connected to websocket: False"
+        }
+
+        conn.onmessage = (messageEvent) => {
+            console.log(messageEvent)
+
+            const eventData = JSON.parse(messageEvent.data)
+
+            const event = Object.assign(new Event, eventData)
+
+            routeEvent(event)
+        }
+    } else {
+        alert("Not supporting websockets!")
+    }
+}
 
 class Event {
     constructor(type, payload) {
@@ -15,17 +89,39 @@ const routeEvent = (event) => {
 
     switch(event.type) {
         case "new_message":
-            console.log("new message")
+            // console.log("new message")
+            const messageEvent = Object.assign(new NewMessageEvent, event.payload)
+            appendChatMessage(messageEvent)
             break
         default:
             alert("Unsupported message type!")
+            break
     }
+}
+
+const appendChatMessage = (messageEvent) => {
+    let date = new Date(messageEvent.sent)
+    const formattedMessage = `${date.toLocaleString()}: ${messageEvent.message}`
+
+    let textArea = document.getElementById("chatmessages")
+    textArea.innerHTML = textArea.innerHTML + "\n" + formattedMessage
+    textArea.scrollTop = textArea.scrollHeight
 }
 
 const changeChatRoom = () => {
     let newChat = document.getElementById("chatroom")
     if(newChat != null && newChat.value !== selectedChat) {
-        console.log(newChat)
+        // console.log(newChat)
+        selectedChat = newChat.value
+
+        let header = document.getElementById("chat-header")
+        header.innerHTML = `Currently, in chat: ${selectedChat}`
+
+        let changeEvent = new ChangeRoomEvent(selectedChat)
+        sendEvent("change_room", changeEvent)
+
+        let textArea = document.getElementById("chatmessages")
+        textArea.innerHTML = `You changed room into: ${selectedChat}`
     }
 
     return false;
@@ -35,8 +131,9 @@ const changeChatRoom = () => {
 const sendMessage = () => {
     let newMessage = document.getElementById("message")
     if(newMessage != null) {
+        let outgoingEvent = new SendMessageEvent(newMessage.value, "dohan")
         // console.log(conn)
-        sendEvent("send_message", newMessage.value)
+        sendEvent("send_message", outgoingEvent)
     }
 
     return false
@@ -50,21 +147,5 @@ const sendEvent = (eventName, payload) => {
 window.onload = () => {
     document.getElementById("chatroom-selection").onsubmit = changeChatRoom
     document.getElementById("chatroom-message").onsubmit = sendMessage
-
-    if(window["WebSocket"]) {
-        console.info("Supports websocket!")
-
-        conn = new WebSocket("ws://" + document.location.host + "/ws")
-
-        conn.onmessage = (messageEvent) => {
-            console.log(messageEvent)
-
-            const eventData = JSON.parse(messageEvent.data)
-            const event = Object.assign(new Event, eventData)
-
-            routeEvent(event)
-        }
-    } else {
-        alert("Not supporting websocket!")
-    }
+    document.getElementById("login-form").onsubmit = login
 }
