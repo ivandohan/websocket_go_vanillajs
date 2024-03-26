@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"sync"
 	"time"
+	"websocket-message-sample/data"
 	"websocket-message-sample/entity/login"
 	wsentity "websocket-message-sample/entity/ws"
 )
@@ -99,6 +100,17 @@ func ChatRoomHandler(event wsentity.Event, c *Client) error {
 	return nil
 }
 
+func findUser(username, password string) bool {
+	for _, value := range data.RegisteredUsers {
+		if (value[username]) == password {
+			return true
+			break
+		}
+	}
+
+	return false
+}
+
 func (m *Manager) LoginManager(w http.ResponseWriter, r *http.Request) {
 	var loginRequest login.UserLoginRequest
 	err := json.NewDecoder(r.Body).Decode(&loginRequest)
@@ -107,11 +119,12 @@ func (m *Manager) LoginManager(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if loginRequest.Username == "dohan" && loginRequest.Password == "dohanwiuwiu" {
+	if findUser(loginRequest.Username, loginRequest.Password) {
 		otp := m.otps.NewOTP()
 
 		response := login.UserLoginResponse{
-			OTP: otp.Key,
+			Username: loginRequest.Username,
+			OTP:      otp.Key,
 		}
 
 		data, err := json.Marshal(response)

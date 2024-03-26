@@ -21,6 +21,7 @@ class ChangeRoomEvent {
 
 let selectedChat = "general"
 let conn
+let username
 
 const login = () => {
     let loginData = {
@@ -40,6 +41,8 @@ const login = () => {
         }
     }).then((data) => {
         connectWebSocket(data.otp)
+        username = data.username
+        alert(username)
     }).catch((err) => {
         alert("[ERROR] [login JS]")
     })
@@ -62,7 +65,7 @@ const connectWebSocket = (otp) => {
         }
 
         conn.onmessage = (messageEvent) => {
-            console.log(messageEvent)
+            // console.log(messageEvent)
 
             const eventData = JSON.parse(messageEvent.data)
 
@@ -101,7 +104,14 @@ const routeEvent = (event) => {
 
 const appendChatMessage = (messageEvent) => {
     let date = new Date(messageEvent.sent)
-    const formattedMessage = `${date.toLocaleString()}: ${messageEvent.message}`
+    let senderName
+    if(username === messageEvent.from) {
+        senderName = "me"
+    } else {
+        senderName = messageEvent.from
+    }
+
+    const formattedMessage = `[${senderName}]${date.toLocaleString()}: ${messageEvent.message}`
 
     let textArea = document.getElementById("chatmessages")
     textArea.innerHTML = textArea.innerHTML + "\n" + formattedMessage
@@ -131,7 +141,7 @@ const changeChatRoom = () => {
 const sendMessage = () => {
     let newMessage = document.getElementById("message")
     if(newMessage != null) {
-        let outgoingEvent = new SendMessageEvent(newMessage.value, "dohan")
+        let outgoingEvent = new SendMessageEvent(newMessage.value, username)
         // console.log(conn)
         sendEvent("send_message", outgoingEvent)
     }

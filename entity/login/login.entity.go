@@ -6,5 +6,6 @@ type UserLoginRequest struct {
 }
 
 type UserLoginResponse struct {
-	OTP string `json:"otp"`
+	Username string `json:"username"`
+	OTP      string `json:"otp"`
 }
