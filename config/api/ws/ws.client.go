@@ -67,6 +67,8 @@ func (c *Client) readMessages() {
 			break
 		}
 
+		log.Println("[INFO] [readMessage - Client] Request contains:", request)
+
 		if err := c.manager.routeEvent(request, c); err != nil {
 			log.Println("[ERROR] [readMessages - Client] Error handling message :", err)
 		}

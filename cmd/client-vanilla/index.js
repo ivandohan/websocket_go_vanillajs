@@ -42,7 +42,6 @@ const login = () => {
     }).then((data) => {
         connectWebSocket(data.otp)
         username = data.username
-        alert(username)
     }).catch((err) => {
         alert("[ERROR] [login JS]")
     })
@@ -151,6 +150,9 @@ const sendMessage = () => {
 
 const sendEvent = (eventName, payload) => {
     const event = new Event(eventName, payload)
+
+    console.log(event)
+
     conn.send(JSON.stringify(event))
 }
 

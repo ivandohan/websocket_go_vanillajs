@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[Design] [Dohan] WS Sample</title>
+    <link rel="stylesheet" href="style.css">
+<!--    <script src="https://kit.fontawesome.com/ad87ede367.js" crossorigin="anonymous"></script>-->
+</head>
+<body>
+
+<section class="msger">
+    <header class="msger-header">
+        <div class="msger-header-title">
+            Websocket Sample
+        </div>
+        <div class="msger-header-attributes">
+            <div class="header-attribute solid-border bg-chatroom">
+                General
+            </div>
+            <div class="header-attribute solid-border bg-connected">
+                Connected
+            </div>
+        </div>
+    </header>
+
+    <main class="msger-chat">
+        <div class="msg left-msg">
+            <div
+                    class="msg-img"
+                    style="background-image: url(https://image.flaticon.com/icons/svg/327/327779.svg)"
+            ></div>
+
+            <div class="msg-bubble">
+                <div class="msg-info">
+                    <div class="msg-info-name">Dohan</div>
+                    <div class="msg-info-time">12:45</div>
+                </div>
+
+                <div class="msg-text">
+                    Update template design for my blueprint. ASAP.
+                </div>
+            </div>
+        </div>
+
+        <div class="msg right-msg">
+            <div
+                    class="msg-img"
+                    style="background-image: url(https://image.flaticon.com/icons/svg/145/145867.svg)"
+            ></div>
+
+            <div class="msg-bubble">
+                <div class="msg-info">
+                    <div class="msg-info-name">Me</div>
+                    <div class="msg-info-time">12:46</div>
+                </div>
+
+                <div class="msg-text">
+                    Design - Blueprint - Sketch, all of them stored in ./cmd
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <form class="msger-inputarea">
+        <input type="text" class="msger-input" placeholder="Enter your message...">
+        <button type="submit" class="msger-send-btn">Send</button>
+    </form>
+</section>
+
+<script src="index.js"></script>
+</body>
+</html>

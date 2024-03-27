@@ -33,6 +33,8 @@ func CheckOrigin(r *http.Request) bool {
 	fmt.Println("[INFO] [checkOrigin - HTTP] :", origin)
 
 	switch origin {
+	case "http://localhost:3000":
+		return true
 	case "https://localhost:8080":
 		return true
 	default:
@@ -112,6 +114,9 @@ func findUser(username, password string) bool {
 }
 
 func (m *Manager) LoginManager(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+
 	var loginRequest login.UserLoginRequest
 	err := json.NewDecoder(r.Body).Decode(&loginRequest)
 	if err != nil {
@@ -149,6 +154,9 @@ func (m *Manager) setupEventHandlers() {
 
 func (m *Manager) routeEvent(event wsentity.Event, c *Client) error {
 	// Check if Handler is present in Map
+	if event.Type == "" {
+		log.Println("[INFO] [routeEvent - Manager] : Event type is nil BEGO")
+	}
 	if handler, ok := m.handlers[event.Type]; ok {
 		// Execute the handler and return any err
 		if err := handler(event, c); err != nil {
@@ -161,6 +169,9 @@ func (m *Manager) routeEvent(event wsentity.Event, c *Client) error {
 }
 
 func (m *Manager) ServeWS(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	otp := r.URL.Query().Get("otp")
 	if otp == "" {
 		w.WriteHeader(http.StatusUnauthorized)
