@@ -43,7 +43,7 @@ const login = () => {
         connectWebSocket(data.otp)
         username = data.username
     }).catch((err) => {
-        alert("[ERROR] [login JS]")
+        alert("[ERROR] [auth-ui JS]")
     })
 
     return false
@@ -91,12 +91,12 @@ const routeEvent = (event) => {
 
     switch(event.type) {
         case "new_message":
-            // console.log("new message")
+            // console.log("new message-ui")
             const messageEvent = Object.assign(new NewMessageEvent, event.payload)
             appendChatMessage(messageEvent)
             break
         default:
-            alert("Unsupported message type!")
+            alert("Unsupported message-ui type!")
             break
     }
 }
@@ -138,7 +138,7 @@ const changeChatRoom = () => {
 
 
 const sendMessage = () => {
-    let newMessage = document.getElementById("message")
+    let newMessage = document.getElementById("message-ui")
     if(newMessage != null) {
         let outgoingEvent = new SendMessageEvent(newMessage.value, username)
         // console.log(conn)
@@ -158,6 +158,6 @@ const sendEvent = (eventName, payload) => {
 
 window.onload = () => {
     document.getElementById("chatroom-selection").onsubmit = changeChatRoom
-    document.getElementById("chatroom-message").onsubmit = sendMessage
-    document.getElementById("login-form").onsubmit = login
+    document.getElementById("chatroom-message-ui").onsubmit = sendMessage
+    document.getElementById("auth-ui-form").onsubmit = login
 }

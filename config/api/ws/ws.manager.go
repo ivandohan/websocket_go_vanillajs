@@ -35,6 +35,8 @@ func CheckOrigin(r *http.Request) bool {
 	switch origin {
 	case "http://localhost:3000":
 		return true
+	case "http://localhost:3006":
+		return true
 	case "https://localhost:8080":
 		return true
 	default:
@@ -75,7 +77,7 @@ func SendMessageHandler(event wsentity.Event, c *Client) error {
 
 	data, err := json.Marshal(broadMessage)
 	if err != nil {
-		return fmt.Errorf("[ERROR] [SendMessageHandler - Manager] : Failed to marshal broadcast message, %v\n", err)
+		return fmt.Errorf("[ERROR] [SendMessageHandler - Manager] : Failed to marshal broadcast message-ui, %v\n", err)
 	}
 
 	var outgoingEvent wsentity.Event
@@ -115,7 +117,7 @@ func findUser(username, password string) bool {
 
 func (m *Manager) LoginManager(w http.ResponseWriter, r *http.Request) {
 
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	var loginRequest login.UserLoginRequest
 	err := json.NewDecoder(r.Body).Decode(&loginRequest)

@@ -1,6 +1,6 @@
 import './App.css';
 import {useState} from "react";
-import UserInterface from "./components/user-interface";
+import MessageUi from "./components/message-ui/message-ui";
 import { v4 as uuid } from "uuid";
 
 class SendMessageEvent {
@@ -117,7 +117,7 @@ const App = () => {
         appendChatMessage(messageEvent);
         break;
       default:
-        alert("Unsupported message type!");
+        alert("Unsupported message-ui type!");
         break;
     }
   }
@@ -165,6 +165,8 @@ const App = () => {
       sendEvent("send_message", outgoingEvent, conn)
     }
 
+    setNewMessage("")
+
     return false;
   }
 
@@ -195,16 +197,23 @@ const App = () => {
       console.log(err)
     })
 
+    setPassword("")
+    setUsername("")
+
     return false;
   }
 
 
   return (
       <div className="App">
-        <UserInterface
+        <MessageUi
             isLogin={isLogin}
             isConnected={isConnected}
             selectedRoom={selectedRoom}
+
+            usernameValue={loginFormUsername}
+            passwordValue={loginFormPassword}
+            messageValue={newMessage}
 
             onChangeChatRoom={onChangeChatRoom}
             onClickChangeChatRoom={onClickChangeChatRoom}

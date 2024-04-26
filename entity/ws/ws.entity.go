@@ -21,7 +21,7 @@ type ChangeRoomEvent struct {
 }
 
 type SendMessageEvent struct {
-	Message string `json:"message"`
+	Message string `json:"message-ui"`
 	From    string `json:"from"`
 }
 

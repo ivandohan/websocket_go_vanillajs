@@ -55,7 +55,7 @@ func (c *Client) readMessages() {
 
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				log.Printf("error reading message: %v\n", err)
+				log.Printf("error reading message-ui: %v\n", err)
 			}
 
 			break
@@ -70,7 +70,7 @@ func (c *Client) readMessages() {
 		log.Println("[INFO] [readMessage - Client] Request contains:", request)
 
 		if err := c.manager.routeEvent(request, c); err != nil {
-			log.Println("[ERROR] [readMessages - Client] Error handling message :", err)
+			log.Println("[ERROR] [readMessages - Client] Error handling message-ui :", err)
 		}
 		//fmt.Println("[INFO] [readMessages - Client] Message Type:", messageType)
 		fmt.Println("[INFO] [readMessages - Client] Payload:", string(payload))
@@ -109,12 +109,12 @@ func (c *Client) writeMessages() {
 					return
 				}
 
-				// Else, write regular message to the connection
+				// Else, write regular message-ui to the connection
 				if err := c.connection.WriteMessage(websocket.TextMessage, data); err != nil {
 					log.Println("[ERROR] [writeMessages - Client] :", err)
 				}
 
-				log.Println("[PROCESS] [writeMessages - Client] : Sent message")
+				log.Println("[PROCESS] [writeMessages - Client] : Sent message-ui")
 			}
 		case <-ticker.C:
 			{
